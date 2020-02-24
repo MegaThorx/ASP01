@@ -1,0 +1,28 @@
+﻿@model IEnumerable<ASP01.Models.ViewModels.CustomerNamesView>
+@{
+    ViewBag.Title = "Index";
+}
+
+
+<h2>Index</h2>
+
+<table class="table">
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.FullName)
+        </th>
+        <th></th>
+    </tr>
+
+    @foreach (var item in Model) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.FullName)
+            </td>
+            <td>
+                @Html.ActionLink("Edit", "Edit", "Customers", new { id = item.CustomerId }, null) |
+                @Html.ActionLink("Details", "Details", "Customers", new { id = item.CustomerId }, null)
+            </td>
+        </tr>
+    }
+</table>
