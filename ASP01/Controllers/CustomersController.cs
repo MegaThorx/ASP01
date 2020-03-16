@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Data;
 using System.Data.Entity;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Net;
 using System.Threading.Tasks;
 using System.Web;
@@ -18,9 +19,44 @@ namespace ASP01.Controllers
         private readonly RepositoryManager _repository = new RepositoryManager();
 
         // GET: Customers
-        public async Task<ActionResult> Index(int page = 1, int pageSize = 25)
+        public async Task<ActionResult> Index(int page = 1, int pageSize = 25, string orderBy = "", string direction = "asc", string lname = "")
         {
-            return View(await _repository.Customer.GetAllPaginated(page, pageSize));
+            var ascending = direction != "desc";
+
+            ViewData["fname_dir"] = "asc";
+            ViewData["lname_dir"] = "asc";
+            ViewData["birthday_dir"] = "asc";
+
+            var customers = from c in _repository.Customer.GetAllQuery()
+                select c;
+
+            if (!string.IsNullOrEmpty(lname))
+            {
+                customers = customers.Where(c => c.LName.Contains(lname));
+            }
+
+            switch (orderBy)
+            {
+                case "fname":
+                    customers = @ascending ? customers.OrderBy(c => c.FName) : customers.OrderByDescending(c => c.FName);
+                    ViewData["fname_dir"] = ascending ? "desc" : "asc";
+                    break;
+
+                case "lname":
+                    customers = @ascending ? customers.OrderBy(c => c.LName) : customers.OrderByDescending(c => c.LName);
+                    ViewData["lname_dir"] = ascending ? "desc" : "asc";
+                    break;
+
+                case "birthday":
+                    customers = @ascending ? customers.OrderBy(c => c.Birthday) : customers.OrderByDescending(c => c.Birthday);
+                    ViewData["birthday_dir"] = ascending ? "desc" : "asc";
+                    break;
+                default:
+                    customers = customers.OrderBy(c => c.CustomerId);
+                    break;
+            }
+
+            return View(await _repository.Customer.GetAllPaginated(customers, page, pageSize)); 
         }
 
         // GET: Customers/Details/5

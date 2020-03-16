@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Data.Entity;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Threading.Tasks;
 using System.Web;
 using ASP01.Models;
@@ -13,11 +14,6 @@ namespace ASP01.Repositories.Orders
     {
         public OrderRepository(ApplicationDbContext context) : base(context)
         {
-        }
-
-        public override async Task<PaginatedList<Order>> GetAllPaginated(int page = 1, int pageSize = 50)
-        {
-            return await PaginatedList<Order>.CreateAsync(from c in _context.Orders orderby c.OrderId select c, page, pageSize);
         }
 
         public async Task<OrderEditView> FindEditView(int? id)

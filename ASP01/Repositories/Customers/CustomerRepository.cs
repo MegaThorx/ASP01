@@ -1,7 +1,8 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Data.Entity;
 using System.Linq;
-using System.Security.Cryptography.X509Certificates;
+using System.Linq.Expressions;
 using System.Threading.Tasks;
 using ASP01.Models;
 using ASP01.Models.ViewModels;
@@ -25,10 +26,12 @@ namespace ASP01.Repositories.Customers
                 }).ToListAsync();
         }
 
-        public override async Task<PaginatedList<Customer>> GetAllPaginated(int page = 1, int pageSize = 50)
+        /*
+        public override async Task<PaginatedList<Customer>> GetAllPaginated(Expression<Func<Customer, int>> orderBy, int page = 1, int pageSize = 50)
         {
             return await PaginatedList<Customer>.CreateAsync(from c in _context.Customers orderby c.LName, c.FName select c, page, pageSize);
         }
+        */
 
 
         public async Task<IList<CustomerNamesView>> GetAllView()

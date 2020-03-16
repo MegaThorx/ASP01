@@ -21,7 +21,7 @@ namespace ASP01
 
             this.AddRange(items);
         }
-        
+
         public static async Task<PaginatedList<T>> CreateAsync(IQueryable<T> source, int pageIndex, int pageSize)
         {
             if (pageIndex < 1)

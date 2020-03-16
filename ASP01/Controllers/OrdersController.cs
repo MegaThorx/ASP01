@@ -20,7 +20,7 @@ namespace ASP01.Controllers
         // GET: Orders
         public async Task<ActionResult> Index(int page = 1, int pageSize = 25)
         {
-            return View(await _repository.Order.GetAllPaginated(page, pageSize));
+            return View(await _repository.Order.GetAllPaginated(from o in _repository.Order.GetAllQuery() orderby o.CustomerId select o, page, pageSize));
         }
 
         // GET: Orders/Details/5

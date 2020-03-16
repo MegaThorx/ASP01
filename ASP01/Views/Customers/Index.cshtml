@@ -9,16 +9,24 @@
 <p>
     @Html.ActionLink("Create New", "Create")
 </p>
+
+@using (Html.BeginForm())
+{
+    <p>
+        Nachnamen: @Html.TextBox("lname")
+        <input type="submit" value="Suchen" />
+    </p>
+}
 <table class="table">
     <tr>
         <th>
-            @Html.DisplayNameFor(model => model.FirstOrDefault().FName)
+            @Html.ActionLink("Vorname", "Index", new { orderBy = "fname", direction = ViewData["fname_dir"] })
         </th>
         <th>
-            @Html.DisplayNameFor(model => model.FirstOrDefault().LName)
+            @Html.ActionLink("Nachname", "Index", new { orderBy = "lname", direction = ViewData["lname_dir"] })
         </th>
         <th>
-            @Html.DisplayNameFor(model => model.FirstOrDefault().Birthday)
+            @Html.ActionLink("Geburtsdatum", "Index", new { orderBy = "birthday", direction = ViewData["birthday_dir"] })
         </th>
         <th>
             @Html.DisplayNameFor(model => model.FirstOrDefault().Discount)

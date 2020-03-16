@@ -13,9 +13,14 @@ namespace ASP01.Repositories
     {
         protected readonly ApplicationDbContext _context;
         
-        public virtual async Task<PaginatedList<T>> GetAllPaginated(int page = 1, int pageSize = 50)
+        public virtual IQueryable<T> GetAllQuery()
         {
-            throw new NotImplementedException();
+            return from c in _context.Set<T>() select c;
+        }
+
+        public virtual async Task<PaginatedList<T>> GetAllPaginated(IQueryable<T> query, int page = 1, int pageSize = 50)
+        {
+            return await PaginatedList<T>.CreateAsync(query, page, pageSize);
         }
 
         public BaseRepository(ApplicationDbContext context)
@@ -23,9 +28,16 @@ namespace ASP01.Repositories
             _context = context;
         }
 
-        public virtual async Task<IList<T>> GetAll()
+        public virtual async Task<IList<T>> GetAll(Expression<Func<T, int>> orderBy = null)
         {
-            return await _context.Set<T>().ToListAsync();
+            var dbSet = _context.Set<T>();
+
+            if (orderBy != null)
+            {
+                return await dbSet.OrderBy(orderBy).ToListAsync();
+            }
+
+            return await dbSet.ToListAsync();
         }
 
         public virtual async Task<T> Find(params object[] keyValues)
