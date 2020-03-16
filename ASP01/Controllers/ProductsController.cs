@@ -4,34 +4,34 @@ using System.Data;
 using System.Data.Entity;
 using System.Linq;
 using System.Net;
+using System.Threading.Tasks;
 using System.Web;
 using System.Web.Mvc;
 using ASP01.Models;
+using ASP01.Repositories;
 
 namespace ASP01.Controllers
 {
     public class ProductsController : Controller
     {
-        private ApplicationDbContext db = new ApplicationDbContext();
+        private readonly RepositoryManager _repository = new RepositoryManager();
 
         // GET: Products
-        public ActionResult Index()
+        public async Task<ActionResult> Index()
         {
-            return View(db.Products.ToList());
+            return View(await _repository.Product.GetAll());
         }
 
         // GET: Products/Details/5
-        public ActionResult Details(int? id)
+        public async Task<ActionResult> Details(int? id)
         {
-            if (id == null)
-            {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-            }
-            Product product = db.Products.Find(id);
+            var product =  await _repository.Product.Find(id);
+
             if (product == null)
             {
                 return HttpNotFound();
             }
+
             return View(product);
         }
 
@@ -46,12 +46,12 @@ namespace ASP01.Controllers
         // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include = "ProductId,Name,Description,Price")] Product product)
+        public async Task<ActionResult> Create([Bind(Include = "ProductId,Name,Description,Price")] Product product)
         {
             if (ModelState.IsValid)
             {
-                db.Products.Add(product);
-                db.SaveChanges();
+                _repository.Product.Add(product);
+                await _repository.Commit();
                 return RedirectToAction("Index");
             }
 
@@ -59,17 +59,15 @@ namespace ASP01.Controllers
         }
 
         // GET: Products/Edit/5
-        public ActionResult Edit(int? id)
+        public async Task<ActionResult> Edit(int? id)
         {
-            if (id == null)
-            {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-            }
-            Product product = db.Products.Find(id);
+            var product = await _repository.Product.Find(id);
+
             if (product == null)
             {
                 return HttpNotFound();
             }
+
             return View(product);
         }
 
@@ -78,40 +76,56 @@ namespace ASP01.Controllers
         // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit([Bind(Include = "ProductId,Name,Description,Price")] Product product)
+        public async Task<ActionResult> Edit([Bind(Include = "ProductId,Name,Description,Price")] Product product)
         {
             if (ModelState.IsValid)
             {
-                db.Entry(product).State = EntityState.Modified;
-                db.SaveChanges();
+                var dbProduct = await _repository.Product.Find(product.ProductId);
+
+                if (dbProduct == null)
+                {
+                    return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+                }
+
+                dbProduct.Name = product.Name;
+                dbProduct.Description = product.Description;
+                dbProduct.Price = product.Price;
+
+                await _repository.Commit();
+
                 return RedirectToAction("Index");
             }
             return View(product);
         }
 
         // GET: Products/Delete/5
-        public ActionResult Delete(int? id)
+        public async Task<ActionResult> Delete(int? id)
         {
-            if (id == null)
-            {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-            }
-            Product product = db.Products.Find(id);
+            var product = await _repository.Product.Find(id);
+
             if (product == null)
             {
                 return HttpNotFound();
             }
+
             return View(product);
         }
 
         // POST: Products/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
-        public ActionResult DeleteConfirmed(int id)
+        public async Task<ActionResult> DeleteConfirmed(int id)
         {
-            Product product = db.Products.Find(id);
-            db.Products.Remove(product);
-            db.SaveChanges();
+            var product = await _repository.Product.Find(id);
+
+            if (product == null)
+            {
+                return HttpNotFound();
+            }
+
+            _repository.Product.Remove(product);
+            await _repository.Commit();
+
             return RedirectToAction("Index");
         }
 
@@ -119,7 +133,7 @@ namespace ASP01.Controllers
         {
             if (disposing)
             {
-                db.Dispose();
+                _repository.Dispose();
             }
             base.Dispose(disposing);
         }

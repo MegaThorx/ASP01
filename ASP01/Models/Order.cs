@@ -15,6 +15,7 @@ namespace ASP01.Models
 
         [Display(Name = "Bestelldatum")]
         [Required]
+        [DisplayFormat(DataFormatString = "{0:dd/MM/yyyy}", ApplyFormatInEditMode = true)]
         public DateTime OrderDate { get; set; }
 
         [Display(Name = "Kunde")]
@@ -25,6 +26,9 @@ namespace ASP01.Models
         [Range(0.0f, 100.0f)]
         [Required]
         public float Discount { get; set; }
+
+        [Display(Name = "Total")]
+        public decimal Total => (Positions.Sum(p => p.Sum)) * (1 - (decimal)Discount / (decimal)100);
 
         public virtual Customer Customer { get; set; }
 

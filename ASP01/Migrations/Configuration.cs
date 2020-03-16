@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using ASP01.Models;
 using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.EntityFramework;
@@ -24,33 +25,42 @@ namespace ASP01.Migrations
             //  You can use the DbSet<T>.AddOrUpdate() helper extension method 
             //  to avoid creating duplicate seed data.
 
-            context.Customers.AddOrUpdate( new [] {
+            var random = new Random();
+            var entities = new List<Customer>();
 
+            for (int i = 1; i < 1000; i++)
+            {
+                entities.Add(
                     new Customer
                     {
-                        CustomerId = 1,
-                        LName = "Lastname 1",
-                        FName = "Firstname 2",
-                        Birthday = new DateTime(2000, 12, 31)
-                    },
-
-                    new Customer
-                    {
-                        CustomerId = 2,
-                        LName = "Lastname 2",
-                        FName = "Firstname 2",
-                        Birthday = new DateTime(2000, 12, 31)
-                    },
-
-                    new Customer
-                    {
-                        CustomerId = 3,
-                        LName = "Lastname 3",
-                        FName = "Firstname 3",
-                        Birthday = new DateTime(2000, 12, 31)
+                        CustomerId = i,
+                        LName = new string(Enumerable.Repeat("ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789", 10) .Select(s => s[random.Next(s.Length)]).ToArray()),
+                        FName = new string(Enumerable.Repeat("ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789", 10) .Select(s => s[random.Next(s.Length)]).ToArray()),
+                        Birthday = new DateTime(2000, 12, 31),
+                        Notes = new string(Enumerable.Repeat("ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789", 50).Select(s => s[random.Next(s.Length)]).ToArray()),
                     }
-                }
                 );
+            }
+
+            context.Customers.AddOrUpdate(entities.ToArray());
+
+            var entities2 = new List<Order>();
+
+            for (int i = 100; i < 1100; i++)
+            {
+                entities2.Add(
+                    new Order
+                    {
+                        OrderId = i,
+                        CustomerId = random.Next(1, 1001),
+                        Discount = 0.2f,
+                        OrderDate = new DateTime(2000, 12, 31)
+                    }
+                );
+            }
+
+            context.Orders.AddOrUpdate(entities2.ToArray());
+            
 
             var roleManager = new RoleManager<IdentityRole>(new RoleStore<IdentityRole>(context));
 
@@ -67,6 +77,14 @@ namespace ASP01.Migrations
             {
                 var role = new IdentityRole();
                 role.Name = "Office";
+                roleManager.Create(role);
+            }
+
+
+            if (!roleManager.RoleExists("Guest"))
+            {
+                var role = new IdentityRole();
+                role.Name = "Guest";
                 roleManager.Create(role);
             }
         }

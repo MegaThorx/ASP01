@@ -1,27 +1,40 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Web;
 
-namespace ASP01.Models
+namespace ASP01.Models.ViewModels
 {
-    [Table("OrderPositions", Schema = "cust")]
-    public class OrderPosition
+    public class OrderEditView
     {
-
-        [Key, Column(Order = 0)]
         public int OrderId { get; set; }
 
-        [Key, Column(Order = 1)]
+        [Display(Name = "Bestelldatum")]
+        [Required]
+        public DateTime OrderDate { get; set; }
+
+        [Display(Name = "Kunde")]
+        [Required]
+        public int CustomerId { get; set; }
+
+        [Display(Name = "Rabatt")]
+        [Range(0.0f, 100.0f)]
+        [Required]
+        public float Discount { get; set; }
+
+        public List<OrderPositionEditView> Positions;
+    }
+
+    public class OrderPositionEditView
+    {
         [Display(Name = "Position")]
         public int Position { get; set; }
 
         [Display(Name = "Produkt")]
         [Required]
         public int ProductId { get; set; }
-        
+
         [Display(Name = "Menge")]
         [Required]
         public int Amount { get; set; }
@@ -31,16 +44,9 @@ namespace ASP01.Models
         [Range(0, double.MaxValue)]
         public decimal Price { get; set; }
 
-        [Display(Name = "Summe")]
-        public decimal Sum => (Amount * Price) * (1 - (decimal)Discount / (decimal)100);
-
         [Display(Name = "Rabatt")]
         [Range(0.0f, 100.0f)]
         [Required]
         public float Discount { get; set; }
-
-        public virtual Product Product { get; set; }
-
-        public virtual Order Order { get; set; }
     }
 }

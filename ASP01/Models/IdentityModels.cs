@@ -25,10 +25,12 @@ namespace ASP01.Models
             return userIdentity;
         }
 
-        [StringLength(100)]
+        [Display(Name = "Vorname")]
+        [StringLength(100, MinimumLength = 1)]
         public string FName { get; set; }
 
-        [StringLength(100)]
+        [Display(Name = "Nachname")]
+        [StringLength(100, MinimumLength = 1)]
         public string LName { get; set; }
     }
 

@@ -7,40 +7,32 @@ using System.Web;
 using System.Web.Mvc;
 using ASP01.Models;
 using ASP01.Models.ViewModels;
+using ASP01.Repositories;
 
 namespace ASP01.Controllers
 {
     public class CustomersNamesController : Controller
     {
-        private ApplicationDbContext db = new ApplicationDbContext();
+        private readonly RepositoryManager _repository = new RepositoryManager();
 
-        public ActionResult Index()
+        public async Task<ActionResult> Index()
         {
-            var customers = from c in db.Customers
-                orderby c.LName, c.FName
-                select new CustomerNamesView
-                {
-                    CustomerId = c.CustomerId,
-                    FullName = c.FName + " " + c.LName,
-                };
-
-
-            return View(customers.ToList());
+            return View(await _repository.Customer.GetAllView());
         }
 
         [Route("🤖🤖🤖🤖🤖🤖🤖🤖🤖🤖🤖🤖🤖🤖🤖🤖🤖🤖🤖")]
         public async Task<ActionResult> Test()
         {
-            var customers = from c in db.Customers
-                orderby c.LName, c.FName
-                select new CustomerNamesView
-                {
-                    CustomerId = c.CustomerId,
-                    FullName = c.FName + " " + c.LName,
-                };
+            return View("../Customers/CustomersNames", await _repository.Customer.GetAllView());
+        }
 
-
-            return View("../Customers/CustomersNames", await customers.ToListAsync());
+        protected override void Dispose(bool disposing)
+        {
+            if (disposing)
+            {
+                _repository.Dispose();
+            }
+            base.Dispose(disposing);
         }
     }
 }

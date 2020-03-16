@@ -1,0 +1,151 @@
+﻿@using ASP01.Models
+@model ASP01.Models.ViewModels.OrderEditView
+
+@{
+    ViewBag.Title = "Edit";
+}
+
+<h2>Edit</h2>
+
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
+    
+    <div class="form-horizontal">
+        <h4>Order</h4>
+        <hr />
+        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+        @Html.HiddenFor(model => model.OrderId)
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.OrderDate, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.OrderDate, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.OrderDate, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.CustomerId, "CustomerId", htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.DropDownList("CustomerId", null, htmlAttributes: new { @class = "form-control" })
+                @Html.ValidationMessageFor(model => model.CustomerId, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.Discount, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.Discount, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.Discount, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            <div class="col-md-offset-2 col-md-10">
+                <input type="submit" value="Save" class="btn btn-default" />
+            </div>
+        </div>
+    </div>
+
+
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th>
+                    @Html.DisplayNameFor(model => model.Positions.FirstOrDefault().Position)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Positions.FirstOrDefault().ProductId)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Positions.FirstOrDefault().Amount)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Positions.FirstOrDefault().Price)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Discount)
+                </th>
+            </tr>
+        </thead>
+
+        <tbody id="positions">
+        @for (int i = 0; i < Model.Positions.Count(); i++)
+        {
+            var item = Model.Positions.ElementAt(i);
+            var selectList = new SelectList(ViewData["Products"] as List<ASP01.Models.Product>, "ProductId", "Name", item.ProductId);
+            var prefix = "[" + i.ToString() + "]";
+
+            <tr>
+                <td>
+                    @Html.Hidden(prefix + ".Position", item.Position)
+                    @Html.DisplayFor(model => item.Position, new {htmlAttributes = new {@class = "form-control"}})
+                </td>
+                <td>
+                    @Html.DropDownList(prefix + ".ProductId", selectList, new {@class = "form-control"})
+                </td>
+                <td>
+                    @Html.EditorFor(model => item.Amount, null, prefix + ".Amount", new {htmlAttributes = new {@class = "form-control"}})
+                </td>
+                <td>
+                    @Html.EditorFor(model => item.Price, null, prefix + ".Price", new {htmlAttributes = new {@class = "form-control"}})
+                </td>
+                <td>
+                    @Html.EditorFor(model => item.Discount, null, prefix + ".Discount", new {htmlAttributes = new {@class = "form-control"}})
+                </td>
+            </tr>
+        }
+        </tbody>
+    </table>
+}
+
+<button class="btn btn-sm btn-primary pull-right" onclick="addPosition();">Add position</button>
+<div>
+    @Html.ActionLink("Back to List", "Index")
+</div>
+
+<script>
+    var lastPosition = @Model.Positions.Last().Position;
+    var nextIndex = @Model.Positions.Count();
+    @{
+        var selectList2 = new SelectList(ViewData["Products"] as List<ASP01.Models.Product>, "ProductId", "Name");
+        var pos = new OrderPosition();
+    }
+
+    function addPosition() {
+        $('#positions').append(getPositionForm());
+    }
+
+    function getPositionForm() {
+        lastPosition = lastPosition + 1;
+        var form = `
+        <tr>
+            <td>
+                <input name="[` + nextIndex + `].Position" type="hidden" value="` + lastPosition + `">
+                `+ lastPosition + `
+            </td>
+            <td>
+                @Html.DropDownList("[].ProductId", selectList2, new { @class = "form-control" })
+            </td>
+            <td>
+                @Html.EditorFor(model => pos.Amount, null, "[].Amount", new { htmlAttributes = new { @class = "form-control" } })
+            </td>
+            <td>
+                @Html.EditorFor(model => pos.Price, null, "[].Price", new { htmlAttributes = new { @class = "form-control" } })
+            </td>
+            <td>
+                @Html.EditorFor(model => pos.Discount, null,  "[].Discount", new { htmlAttributes = new { @class = "form-control" } })
+            </td>
+        </tr>`;
+
+        form = form.replace('[]', '[' + nextIndex + ']');
+        form = form.replace('[]', '[' + nextIndex + ']');
+        form = form.replace('[]', '[' + nextIndex + ']');
+        form = form.replace('[]', '[' + nextIndex + ']');
+
+        nextIndex = nextIndex + 1;
+        return form;
+    }
+</script>

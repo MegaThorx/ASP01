@@ -23,11 +23,16 @@ namespace ASP01.Models
         public string LName { get; set; }
 
         [Display(Name = "Geburtsdatum")]
+        [DisplayFormat(DataFormatString = "{0:dd/MM/yyyy}", ApplyFormatInEditMode = true)]
         public DateTime Birthday { get; set; }
 
         [Display(Name = "Rabatt")]
         [Range(0.0f, 100.0f)]
         public float Discount { get; set; }
+
+        [Display(Name = "Notizen")]
+        [StringLength(1000)]
+        public string Notes { get; set; }
 
         public virtual ICollection<Order> Orders { get; set; }
     }
