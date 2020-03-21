@@ -4,6 +4,7 @@ using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Web;
+using System.Web.Routing;
 
 namespace ASP01.Models
 {
@@ -27,11 +28,15 @@ namespace ASP01.Models
         [Required]
         public float Discount { get; set; }
 
+        public int? InvoiceId { get; set; }
+
         [Display(Name = "Total")]
-        public decimal Total => (Positions.Sum(p => p.Sum)) * (1 - (decimal)Discount / (decimal)100);
+        public decimal Total => Math.Round((Positions.Sum(p => p.Sum)) * (1 - (decimal)Discount / (decimal)100), 2);
 
         public virtual Customer Customer { get; set; }
 
         public virtual ICollection<OrderPosition> Positions { get; set; }
+        
+        public virtual Invoice Invoice { get; set; }
     }
 }

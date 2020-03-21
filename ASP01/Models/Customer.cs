@@ -34,6 +34,15 @@ namespace ASP01.Models
         [StringLength(1000)]
         public string Notes { get; set; }
 
+        [Display(Name = "Adresse")]
+        public int? AddressId { get; set; }
+
+        public virtual Address Address { get; set; }
+
         public virtual ICollection<Order> Orders { get; set; }
+
+        public virtual ICollection<Invoice> Invoices { get; set; }
+
+        public virtual ICollection<BasketItem> BasketItem { get; set; }
     }
 }

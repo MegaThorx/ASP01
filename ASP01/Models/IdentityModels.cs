@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Data.Entity;
 using System.Security.Claims;
 using System.Threading.Tasks;
@@ -32,6 +33,13 @@ namespace ASP01.Models
         [Display(Name = "Nachname")]
         [StringLength(100, MinimumLength = 1)]
         public string LName { get; set; }
+
+        [Display(Name = "Kunde")]
+        public int? CustomerId { get; set; }
+
+        public Customer Customer { get; set; }
+
+        public virtual ICollection<BasketItem> BasketItems { get; set; }
     }
 
     public class ApplicationDbContext : IdentityDbContext<ApplicationUser>
@@ -51,6 +59,14 @@ namespace ASP01.Models
 
         public DbSet<OrderPosition> OrderPositions { get; set; }
 
+        public DbSet<BasketItem> BasketItems { get; set; }
+
+        public DbSet<Address> Addresses { get; set; }
+
+        public DbSet<Invoice> Invoices { get; set; }
+
+        public DbSet<InvoicePosition> InvoicePositions { get; set; }
+
         public static ApplicationDbContext Create()
         {
             return new ApplicationDbContext();
@@ -62,6 +78,22 @@ namespace ASP01.Models
 
             modelBuilder.Entity<OrderPosition>() // Fluent API
                 .HasKey(k => new {k.OrderId, k.Position});
+
+            /*
+            modelBuilder.Entity<Invoice>().HasRequired(i => i.Order)
+                .WithRequiredDependent().WillCascadeOnDelete(false);
+
+            modelBuilder.Entity<Order>().HasRequired(o => o.Invoice)
+                .WithRequiredPrincipal();
+                */
+
+
+            modelBuilder.Entity<Invoice>()
+                .HasKey(t => t.InvoiceId);
+
+            modelBuilder.Entity<Order>()
+                .HasRequired(t => t.Invoice)
+                .WithRequiredPrincipal(t => t.Order);
         }
     }
 }

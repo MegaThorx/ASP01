@@ -13,10 +13,14 @@ namespace ASP01.Repositories
         Task<IList<T>> GetAll(Expression<Func<T, int>> orderBy = null);
         IQueryable<T> GetAllQuery();
         Task<PaginatedList<T>> GetAllPaginated(IQueryable<T> query, int page = 1, int pageSize = 50);
+        Task<PaginatedList<T>> GetAllPaginated(IOrderedQueryable<T> query, int page = 1, int pageSize = 50);
         Task<T> Find(params object[] keyValues);
         Task<T> Find(Expression<Func<T, bool>> predicate);
         Task<bool> Exists(params object[] keyValues);
+        Task<bool> Exists(Expression<Func<T, bool>> predicate);
         Task<bool> Exists(T entity);
+        Task<bool> Any();
+        Task<int> Max(Expression<Func<T, int>> predicate);
         T Add(T entity);
         T Remove(T entity);
     }

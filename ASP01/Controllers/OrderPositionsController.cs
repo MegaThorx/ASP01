@@ -75,7 +75,16 @@ namespace ASP01.Controllers
 
             var position = new OrderPosition();
             position.OrderId = order.OrderId;
-            position.Position = order.Positions.Last().Position + 1;
+
+            if (order.Positions.Count == 0)
+            {
+                position.Position = 1;
+            }
+            else
+            {
+                position.Position = order.Positions.Last().Position + 1;
+            }
+
             ViewBag.ProductId = new SelectList(await _repository.Product.GetAll(), "ProductId", "Name");
 
             return PartialView("Partials/AddModal", position);

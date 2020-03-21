@@ -107,7 +107,7 @@
 </div>
 
 <script>
-    var lastPosition = @Model.Positions.Last().Position;
+    var lastPosition = @(Model.Positions.Count != 0 ? Model.Positions.Last().Position : 0);
     var nextIndex = @Model.Positions.Count();
     @{
         var selectList2 = new SelectList(ViewData["Products"] as List<ASP01.Models.Product>, "ProductId", "Name");

@@ -10,9 +10,11 @@ using System.Web.Mvc;
 using ASP01.Models;
 using ASP01.Models.ViewModels;
 using ASP01.Repositories;
+using Microsoft.AspNet.Identity;
 
 namespace ASP01.Controllers
 {
+    [Authorize]
     public class OrdersController : Controller
     {
         private readonly RepositoryManager _repository = new RepositoryManager();
@@ -20,12 +22,21 @@ namespace ASP01.Controllers
         // GET: Orders
         public async Task<ActionResult> Index(int page = 1, int pageSize = 25)
         {
-            return View(await _repository.Order.GetAllPaginated(from o in _repository.Order.GetAllQuery() orderby o.CustomerId select o, page, pageSize));
+            var user = await _repository.User.Find(User.Identity.GetUserId());
+
+            if (User.IsInRole("Admin") || User.IsInRole("Office"))
+            {
+                return View(await _repository.Order.GetAllPaginated(from o in _repository.Order.GetAllQuery() orderby o.CustomerId select o, page, pageSize));
+            }
+
+            return View(await _repository.Order.GetAllPaginated(from o in _repository.Order.GetAllQuery() orderby o.OrderId descending where o.CustomerId == user.CustomerId select o, page, pageSize));
         }
 
         // GET: Orders/Details/5
         public async Task<ActionResult> Details(int? id)
         {
+            var user = await _repository.User.Find(User.Identity.GetUserId());
+            
             var order = await _repository.Order.Find(id);
 
             if (order == null)
@@ -33,10 +44,20 @@ namespace ASP01.Controllers
                 return HttpNotFound();
             }
 
+            if (order.CustomerId != user.CustomerId)
+            {
+                if (!User.IsInRole("Admin") && !User.IsInRole("Office"))
+                {
+                    return HttpNotFound();
+                }
+            }
+
+
             return View(order);
         }
 
         // GET: Orders/Create
+        [Authorize(Roles = "Admin,Office")]
         public async Task<ActionResult> Create()
         {
             ViewBag.CustomerId = new SelectList(await _repository.Customer.GetAll(), "CustomerId", "FName");
@@ -48,6 +69,7 @@ namespace ASP01.Controllers
         // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Admin,Office")]
         public async Task<ActionResult> Create([Bind(Include = "OrderId,OrderDate,CustomerId,Discount")] Order order)
         {
             if (ModelState.IsValid)
@@ -62,6 +84,7 @@ namespace ASP01.Controllers
         }
 
         // GET: Orders/EditModal/5
+        [Authorize(Roles = "Admin,Office")]
         public async Task<ActionResult> EditModal(int? id)
         {
             var order = await _repository.Order.FindEditView(id);
@@ -77,6 +100,7 @@ namespace ASP01.Controllers
         }
 
         // GET: Orders/Edit/5
+        [Authorize(Roles = "Admin,Office")]
         public async Task<ActionResult> Edit(int? id)
         {
             var order = await _repository.Order.FindEditView(id);
@@ -96,6 +120,7 @@ namespace ASP01.Controllers
         // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Admin,Office")]
         public async Task<ActionResult> Edit(OrderEditView order, List<OrderPositionEditView> positions)
         {
             order.Positions = positions;
@@ -145,6 +170,7 @@ namespace ASP01.Controllers
         }
 
         // GET: Orders/Delete/5
+        [Authorize(Roles = "Admin,Office")]
         public async Task<ActionResult> Delete(int? id)
         {
             var order = await _repository.Order.Find(id);
@@ -160,6 +186,7 @@ namespace ASP01.Controllers
         // POST: Orders/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Admin,Office")]
         public async Task<ActionResult> DeleteConfirmed(int id)
         {
             var order = await _repository.Order.Find(id);

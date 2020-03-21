@@ -41,20 +41,26 @@
             @Html.DisplayFor(model => model.Discount)
         </dd>
 
-        <dt>
-            @Html.DisplayNameFor(model => model.Total)
-        </dt>
-
-        <dd>
-            @Html.DisplayFor(model => model.Total)
-        </dd>
-
     </dl>
 </div>
 <div>
-    @Html.Partial("Partials/OrderPositions", Model.Positions)
+    @Html.Partial("Partials/OrderPositions", Model)
 </div>
 <p>
-    @Html.ActionLink("Edit", "Edit", new { id = Model.OrderId }) |
-    @Html.ActionLink("Back to List", "Index")
+    @if (User.IsInRole("Office") || User.IsInRole("Admin"))
+    {
+        @Html.ActionLink("Edit", "Edit", new {id = Model.OrderId}, new { @class = "btn btn-sm btn-primary" })
+    }
+    @Html.ActionLink("Back to List", "Index", null, new { @class = "btn btn-sm btn-default" })
+</p>
+
+<p>
+    @if (User.IsInRole("Office") || User.IsInRole("Admin"))
+    {
+        using (Html.BeginForm("CreateInvoice", "Invoices", new { id = Model.OrderId }))
+        {
+            @Html.AntiForgeryToken()
+            <input type="submit" value="Rechnung erstellen" class="btn btn-sm btn-default" />
+        }
+    }
 </p>

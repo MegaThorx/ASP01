@@ -37,6 +37,14 @@
     </dl>
 </div>
 <p>
-    @Html.ActionLink("Edit", "Edit", new { id = Model.ProductId }) |
-    @Html.ActionLink("Back to List", "Index")
+    @using (Html.BeginForm("AddProduct", "BasketItems", new { id = Model.ProductId }))
+    {
+        @Html.AntiForgeryToken()
+        <input type="submit" value="In den Warenkorb" class="btn btn-sm btn-primary" />
+        if (User.IsInRole("Office") || User.IsInRole("Admin"))
+        {
+            <a class="btn btn-sm btn-primary" href="@Url.Action("Edit", new { id = Model.ProductId })" role="button">Edit</a>
+        }
+        <a class="btn btn-sm btn-default" href="@Url.Action("Index")" role="button">Back to List</a>
+    }
 </p>

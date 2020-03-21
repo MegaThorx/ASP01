@@ -1,0 +1,79 @@
+﻿@model PaginatedList<ASP01.Models.Invoice>
+
+@{
+    ViewBag.Title = "Index";
+}
+
+<h2>Index</h2>
+
+<table class="table">
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.FirstOrDefault().InvoiceId)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.FirstOrDefault().Customer.FName)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.FirstOrDefault().Order.OrderId)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.FirstOrDefault().InvoiceDate)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.FirstOrDefault().Discount)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.FirstOrDefault().Street)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.FirstOrDefault().City)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.FirstOrDefault().PostalCode)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.FirstOrDefault().Country)
+        </th>
+        <th></th>
+    </tr>
+
+    @foreach (var item in Model)
+    {
+    <tr>
+        <td>
+            @Html.DisplayFor(modelItem => item.InvoiceId)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Customer.FName)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Order.OrderId)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.InvoiceDate)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Discount)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Street)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.City)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.PostalCode)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Country)
+        </td>
+        <td>
+            @Html.ActionLink("Details", "Details", new { id = item.InvoiceId }, new { @class = "btn btn-sm btn-primary" })
+        </td>
+    </tr>
+    }
+
+</table>
+
+@Html.Partial("Partials/Pagination", Model.GetPaginatedData())

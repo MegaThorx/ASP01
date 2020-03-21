@@ -18,6 +18,11 @@ namespace ASP01.Repositories
             return from c in _context.Set<T>() select c;
         }
 
+        public virtual async Task<PaginatedList<T>> GetAllPaginated(IOrderedQueryable<T> query, int page = 1, int pageSize = 50)
+        {
+            return await PaginatedList<T>.CreateAsync(query, page, pageSize);
+        }
+
         public virtual async Task<PaginatedList<T>> GetAllPaginated(IQueryable<T> query, int page = 1, int pageSize = 50)
         {
             return await PaginatedList<T>.CreateAsync(query, page, pageSize);
@@ -47,7 +52,7 @@ namespace ASP01.Repositories
 
         public async Task<T> Find(Expression<Func<T, bool>> predicate)
         {
-            return await _context.Set<T>().Where(predicate).FirstAsync();
+            return await _context.Set<T>().Where(predicate).FirstOrDefaultAsync();
         }
 
         public async Task<bool> Exists(params object[] keyValues)
@@ -58,6 +63,21 @@ namespace ASP01.Repositories
         public async Task<bool> Exists(T entity)
         {
             return await _context.Set<T>().AnyAsync(e => e == entity);
+        }
+
+        public async Task<bool> Exists(Expression<Func<T, bool>> predicate)
+        {
+            return await _context.Set<T>().AnyAsync(predicate);
+        }
+
+        public async Task<bool> Any()
+        {
+            return await _context.Set<T>().AnyAsync();
+        }
+
+        public async Task<int> Max(Expression<Func<T, int>> predicate)
+        {
+            return await _context.Set<T>().MaxAsync(predicate);
         }
 
         public virtual T Add(T entity)

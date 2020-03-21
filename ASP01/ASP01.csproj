@@ -177,10 +177,11 @@
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="App_Start\Startup.Auth.cs" />
     <Compile Include="Controllers\AccountController.cs" />
+    <Compile Include="Controllers\BasketItemsController.cs" />
     <Compile Include="Controllers\CustomersController.cs" />
     <Compile Include="Controllers\CustomersNamesController.cs" />
-    <Compile Include="Controllers\CustomersTestController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
+    <Compile Include="Controllers\InvoicesController.cs" />
     <Compile Include="Controllers\ManageController.cs" />
     <Compile Include="Controllers\OrderPositionsController.cs" />
     <Compile Include="Controllers\OrdersController.cs" />
@@ -204,10 +205,26 @@
     <Compile Include="Migrations\202003091510460_AddCustomerNotesField.Designer.cs">
       <DependentUpon>202003091510460_AddCustomerNotesField.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\202003200727591_AddItemBasket.cs" />
+    <Compile Include="Migrations\202003200727591_AddItemBasket.Designer.cs">
+      <DependentUpon>202003200727591_AddItemBasket.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\202003201247182_AddInvoices.cs" />
+    <Compile Include="Migrations\202003201247182_AddInvoices.Designer.cs">
+      <DependentUpon>202003201247182_AddInvoices.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\202003211106091_AddCanceledAndCopyFields.cs" />
+    <Compile Include="Migrations\202003211106091_AddCanceledAndCopyFields.Designer.cs">
+      <DependentUpon>202003211106091_AddCanceledAndCopyFields.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\AccountViewModels.cs" />
+    <Compile Include="Models\Address.cs" />
+    <Compile Include="Models\BasketItem.cs" />
     <Compile Include="Models\Customer.cs" />
     <Compile Include="Models\IdentityModels.cs" />
+    <Compile Include="Models\InvoicePosition.cs" />
+    <Compile Include="Models\Invoice.cs" />
     <Compile Include="Models\ManageViewModels.cs" />
     <Compile Include="Models\Order.cs" />
     <Compile Include="Models\OrderPosition.cs" />
@@ -221,6 +238,12 @@
     <Compile Include="Repositories\Customers\CustomerRepository.cs" />
     <Compile Include="Repositories\Customers\ICustomerRepository.cs" />
     <Compile Include="Repositories\IBaseRepository.cs" />
+    <Compile Include="Repositories\InvoicePositions\IInvoicePositionsRepository.cs" />
+    <Compile Include="Repositories\InvoicePositions\InvoicePositionsRepository.cs" />
+    <Compile Include="Repositories\Address\IAddressRepository.cs" />
+    <Compile Include="Repositories\Address\AddressRepository.cs" />
+    <Compile Include="Repositories\Invoices\IInvoiceRepository.cs" />
+    <Compile Include="Repositories\Invoices\InvoiceRepository.cs" />
     <Compile Include="Repositories\OrderPositions\IOrderPositionRepository.cs" />
     <Compile Include="Repositories\OrderPositions\OrderPositionRepository.cs" />
     <Compile Include="Repositories\Orders\IOrderRepository.cs" />
@@ -228,12 +251,15 @@
     <Compile Include="Repositories\Products\IProductRepository.cs" />
     <Compile Include="Repositories\Products\ProductRepository.cs" />
     <Compile Include="Repositories\RepositoryManager.cs" />
+    <Compile Include="Repositories\BasketItems\IBasketItemRepository.cs" />
+    <Compile Include="Repositories\BasketItems\BasketItemRepository.cs" />
+    <Compile Include="Repositories\Users\IUserRepository.cs" />
+    <Compile Include="Repositories\Users\UserRepository.cs" />
     <Compile Include="Startup.cs" />
-    <Content Include="Views\CustomersTest\Create.cshtml" />
-    <Content Include="Views\CustomersTest\Delete.cshtml" />
-    <Content Include="Views\CustomersTest\Details.cshtml" />
-    <Content Include="Views\CustomersTest\Edit.cshtml" />
-    <Content Include="Views\CustomersTest\Index.cshtml" />
+    <Content Include="Views\BasketItems\Details.cshtml" />
+    <Content Include="Views\BasketItems\Index.cshtml" />
+    <Content Include="Views\Invoices\Details.cshtml" />
+    <Content Include="Views\Invoices\Index.cshtml" />
     <None Include="Views\Shared\Partials\Pagination.cshtml" />
   </ItemGroup>
   <ItemGroup>
@@ -350,6 +376,15 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\202003091510460_AddCustomerNotesField.resx">
       <DependentUpon>202003091510460_AddCustomerNotesField.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202003200727591_AddItemBasket.resx">
+      <DependentUpon>202003200727591_AddItemBasket.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202003201247182_AddInvoices.resx">
+      <DependentUpon>202003201247182_AddInvoices.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202003211106091_AddCanceledAndCopyFields.resx">
+      <DependentUpon>202003211106091_AddCanceledAndCopyFields.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>

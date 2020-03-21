@@ -1,0 +1,175 @@
+﻿@model ASP01.Models.Invoice
+
+@{
+    ViewBag.Title = "Details";
+}
+
+<h2>Details</h2>
+
+<div>
+    <h4>Invoice</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.Customer.FName)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Customer.FName)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Order.OrderId)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Order.OrderId)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.InvoiceDate)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.InvoiceDate)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Discount)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Discount)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Street)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Street)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.City)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.City)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.PostalCode)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.PostalCode)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Country)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Country)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Canceled)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Canceled)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Copy)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Copy)
+        </dd>
+
+    </dl>
+</div>
+
+<p>
+    
+    @if (User.IsInRole("Office") || User.IsInRole("Admin"))
+    {
+        using (Html.BeginForm("Print", "Invoices", new {id = Model.InvoiceId }))
+        {
+            @Html.AntiForgeryToken()
+            <input type="submit" value="Drucken" class="btn btn-sm btn-default"/>
+        }
+        if (!Model.Canceled)
+        {
+            using (Html.BeginForm("Cancel", "Invoices", new {id = Model.InvoiceId}))
+            {
+                @Html.AntiForgeryToken()
+                <input type="submit" value="Stornieren" class="btn btn-sm btn-default"/>
+            }
+        }
+    }
+</p>
+<div>
+    <table class="table">
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.Positions.FirstOrDefault().Position)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Positions.FirstOrDefault().Product.Name)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Positions.FirstOrDefault().Amount)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Positions.FirstOrDefault().Price)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Positions.FirstOrDefault().Discount)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Positions.FirstOrDefault().Sum)
+            </th>
+        </tr>
+
+        @foreach (var item in Model.Positions)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Position)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.ProductName)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Amount)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Price)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Discount)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Sum)
+                </td>
+            </tr>
+        }
+
+        <tr>
+            <th></th>
+            <th></th>
+            <th></th>
+            <th></th>
+            <th></th>
+            <th>@Model.Total</th>
+        </tr>
+
+    </table>
+</div>
+<p>
+    @Html.ActionLink("Back to List", "Index", null, new { @class = "btn btn-sm btn-primary" })
+</p>

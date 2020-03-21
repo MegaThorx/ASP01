@@ -1,0 +1,66 @@
+﻿@using System.Web.UI.WebControls
+@model IEnumerable<ASP01.Models.BasketItem>
+
+@{
+    ViewBag.Title = "Index";
+}
+
+<h2>Index</h2>
+
+<table class="table">
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.Product.Name)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Amount)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Product.Price)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Sum)
+        </th>
+    </tr>
+    @using (Html.BeginForm("Update", "BasketItems"))
+    {
+        @Html.AntiForgeryToken()
+        for (int i = 0; i < Model.Count(); i++)
+        {
+            var item = Model.ElementAt(i);
+            var prefix = "[" + i.ToString() + "]";
+
+    <tr>
+        <td>
+            @Html.Hidden(prefix + ".ProductId", item.ProductId)
+            @Html.DisplayFor(modelItem => item.Product.Name)
+        </td>
+        <td>
+            @Html.EditorFor(model => item.Amount, null, prefix + ".Amount", new { htmlAttributes = new { @class = "form-control" } })
+        </td>
+        <td>
+            @Html.DisplayFor(model => item.Product.Price)
+        </td>
+        <td>
+            @Html.DisplayFor(model => item.Sum)
+        </td>
+    </tr>
+        }
+        <tr>
+            <th></th>
+            <th></th>
+            <th></th>
+            <th>@ViewData["Total"]</th>
+        </tr>
+        <input type="submit" value="Speichern" class="btn btn-sm btn-primary" />
+        <input type="reset" value="Zurücksetzen" class="btn btn-sm btn-default" />
+    }
+
+</table>
+<p>
+    @using (Html.BeginForm("Order", "BasketItems"))
+    {
+        @Html.AntiForgeryToken()
+        <input type="submit" value="Bestellen" class="btn btn-sm btn-default" />
+    }
+</p>

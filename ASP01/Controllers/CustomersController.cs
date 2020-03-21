@@ -14,6 +14,7 @@ using ASP01.Repositories;
 
 namespace ASP01.Controllers
 {
+    [Authorize(Roles = "Office,Admin")]
     public class CustomersController : Controller
     {
         private readonly RepositoryManager _repository = new RepositoryManager();

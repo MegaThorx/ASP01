@@ -4,10 +4,15 @@ using System.Linq;
 using System.Threading.Tasks;
 using System.Web;
 using ASP01.Models;
+using ASP01.Repositories.Address;
+using ASP01.Repositories.BasketItems;
 using ASP01.Repositories.Customers;
+using ASP01.Repositories.InvoicePositions;
+using ASP01.Repositories.Invoices;
 using ASP01.Repositories.OrderPositions;
 using ASP01.Repositories.Orders;
 using ASP01.Repositories.Products;
+using ASP01.Repositories.Users;
 
 namespace ASP01.Repositories
 {
@@ -26,7 +31,22 @@ namespace ASP01.Repositories
 
         private IOrderPositionRepository _orderPosition { get; set; }
         public IOrderPositionRepository OrderPosition => _orderPosition ?? (_orderPosition = new OrderPositionRepository(_context));
-        
+
+        private IUserRepository _user { get; set; }
+        public IUserRepository User => _user ?? (_user = new UserRepository(_context));
+
+        private IBasketItemRepository _basketItem { get; set; }
+        public IBasketItemRepository BasketItem => _basketItem ?? (_basketItem = new BasketItemRepository(_context));
+
+        private IInvoiceRepository _invoice { get; set; }
+        public IInvoiceRepository Invoice => _invoice ?? (_invoice = new InvoiceRepository(_context));
+
+        private IInvoicePositionRepository _invoicePosition { get; set; }
+        public IInvoicePositionRepository InvoicePosition => _invoicePosition ?? (_invoicePosition = new InvoicePositionRepository(_context));
+
+        private IAddressRepository _address { get; set; }
+        public IAddressRepository Address => _address ?? (_address = new AddressRepository(_context));
+
         public async Task<int> Commit()
         {
             return await _context.SaveChangesAsync();

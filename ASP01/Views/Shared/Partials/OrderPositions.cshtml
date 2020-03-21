@@ -1,28 +1,28 @@
-﻿@model IEnumerable<ASP01.Models.OrderPosition>
+﻿@model ASP01.Models.Order
 
 <table class="table">
     <tr>
         <th>
-            @Html.DisplayNameFor(model => model.Position)
+            @Html.DisplayNameFor(model => model.Positions.FirstOrDefault().Position)
         </th>
         <th>
-            @Html.DisplayNameFor(model => model.Product.Name)
+            @Html.DisplayNameFor(model => model.Positions.FirstOrDefault().Product.Name)
         </th>
         <th>
-            @Html.DisplayNameFor(model => model.Amount)
+            @Html.DisplayNameFor(model => model.Positions.FirstOrDefault().Amount)
         </th>
         <th>
-            @Html.DisplayNameFor(model => model.Price)
+            @Html.DisplayNameFor(model => model.Positions.FirstOrDefault().Price)
         </th>
         <th>
-            @Html.DisplayNameFor(model => model.Discount)
+            @Html.DisplayNameFor(model => model.Positions.FirstOrDefault().Discount)
         </th>
         <th>
-            @Html.DisplayNameFor(model => model.Sum)
+            @Html.DisplayNameFor(model => model.Positions.FirstOrDefault().Sum)
         </th>
     </tr>
 
-    @foreach (var item in Model)
+    @foreach (var item in Model.Positions)
     {
     <tr>
         <td>
@@ -45,5 +45,14 @@
         </td>
     </tr>
     }
+    
+    <tr>
+        <th></th>
+        <th></th>
+        <th></th>
+        <th></th>
+        <th></th>
+        <th>@Model.Total</th>
+    </tr>
 
 </table>
