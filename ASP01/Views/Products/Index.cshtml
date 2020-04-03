@@ -7,7 +7,7 @@
 <h2>Index</h2>
 
 <p>
-    @Html.ActionLink("Create New", "Create")
+    @Html.ActionLink(Resources.CreateNew, "Create")
 </p>
 <table class="table">
     <tr>
@@ -38,15 +38,15 @@
             @using (Html.BeginForm("AddProduct", "BasketItems", new { id = item.ProductId }))
             {
                 @Html.AntiForgeryToken()
-                <input type="submit" value="In den Warenkorb" class="btn btn-sm btn-primary" />
+                <input type="submit" value="@Resources.AddToBasket" class="btn btn-sm btn-primary" />
                 if (User.IsInRole("Office") || User.IsInRole("Admin"))
                 {
-                    <a class="btn btn-sm btn-primary" href="@Url.Action("Edit", new {id = item.ProductId})" role="button">Edit</a>
+                    <a class="btn btn-sm btn-primary" href="@Url.Action("Edit", new {id = item.ProductId})" role="button">@Resources.Edit</a>
                 }
-                <a class="btn btn-sm btn-primary" href="@Url.Action("Details", new { id = item.ProductId })" role="button">Details</a>
+                <a class="btn btn-sm btn-primary" href="@Url.Action("Details", new { id = item.ProductId })" role="button">@Resources.Details</a>
                 if (User.IsInRole("Office") || User.IsInRole("Admin"))
                 {
-                    <a class="btn btn-sm btn-danger" href="@Url.Action("Delete", new { id = item.ProductId })" role="button">Delete</a>
+                    <a class="btn btn-sm btn-danger" href="@Url.Action("Delete", new { id = item.ProductId })" role="button">@Resources.Delete</a>
                 }
             }
         </td>

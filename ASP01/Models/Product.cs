@@ -14,14 +14,14 @@ namespace ASP01.Models
         public int ProductId { get; set; }
 
         [StringLength(40)]
-        [Display(Name = "Bezeichnung")]
+        [Display(Name = "Title", ResourceType = typeof(Resources))]
         public string Name { get; set; }
 
         [StringLength(200)]
-        [Display(Name = "Beschreibung")]
+        [Display(Name = "Description", ResourceType = typeof(Resources))]
         public string Description { get; set; }
         
-        [Display(Name = "Preis")]
+        [Display(Name = "Price", ResourceType = typeof(Resources))]
         public decimal Price { get; set; }
     }
 }

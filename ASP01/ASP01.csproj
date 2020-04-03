@@ -177,6 +177,7 @@
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="App_Start\Startup.Auth.cs" />
     <Compile Include="Controllers\AccountController.cs" />
+    <Compile Include="Controllers\BaseController.cs" />
     <Compile Include="Controllers\BasketItemsController.cs" />
     <Compile Include="Controllers\CustomersController.cs" />
     <Compile Include="Controllers\CustomersNamesController.cs" />
@@ -189,6 +190,7 @@
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
+    <Compile Include="Helpers\CultureHelper.cs" />
     <Compile Include="Migrations\202002171434047_InitialCreate.cs" />
     <Compile Include="Migrations\202002171434047_InitialCreate.Designer.cs">
       <DependentUpon>202002171434047_InitialCreate.cs</DependentUpon>
@@ -217,6 +219,10 @@
     <Compile Include="Migrations\202003211106091_AddCanceledAndCopyFields.Designer.cs">
       <DependentUpon>202003211106091_AddCanceledAndCopyFields.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\202003270939328_AddLanguage.cs" />
+    <Compile Include="Migrations\202003270939328_AddLanguage.Designer.cs">
+      <DependentUpon>202003270939328_AddLanguage.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\AccountViewModels.cs" />
     <Compile Include="Models\Address.cs" />
@@ -228,6 +234,7 @@
     <Compile Include="Models\ManageViewModels.cs" />
     <Compile Include="Models\Order.cs" />
     <Compile Include="Models\OrderPosition.cs" />
+    <Compile Include="Models\Comment.cs" />
     <Compile Include="Models\Product.cs" />
     <Compile Include="Models\ViewModels\CustomerEditView.cs" />
     <Compile Include="Models\ViewModels\CustomerNamesView.cs" />
@@ -255,11 +262,22 @@
     <Compile Include="Repositories\BasketItems\BasketItemRepository.cs" />
     <Compile Include="Repositories\Users\IUserRepository.cs" />
     <Compile Include="Repositories\Users\UserRepository.cs" />
+    <Compile Include="Resources.de.Designer.cs">
+      <DependentUpon>Resources.de.resx</DependentUpon>
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+    </Compile>
+    <Compile Include="Resources.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Resources.resx</DependentUpon>
+    </Compile>
     <Compile Include="Startup.cs" />
     <Content Include="Views\BasketItems\Details.cshtml" />
     <Content Include="Views\BasketItems\Index.cshtml" />
     <Content Include="Views\Invoices\Details.cshtml" />
     <Content Include="Views\Invoices\Index.cshtml" />
+    <Content Include="Views\Manage\ChangeLanguage.cshtml" />
     <None Include="Views\Shared\Partials\Pagination.cshtml" />
   </ItemGroup>
   <ItemGroup>
@@ -349,7 +367,7 @@
   <ItemGroup>
     <Folder Include="App_Data\" />
     <Folder Include="Properties\PublishProfiles\" />
-    <Folder Include="Views\Customer\" />
+    <Folder Include="Views\Base\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="fonts\glyphicons-halflings-regular.woff2" />
@@ -385,6 +403,17 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\202003211106091_AddCanceledAndCopyFields.resx">
       <DependentUpon>202003211106091_AddCanceledAndCopyFields.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202003270939328_AddLanguage.resx">
+      <DependentUpon>202003270939328_AddLanguage.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resources.de.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resources.de.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resources.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>

@@ -1,0 +1,44 @@
+﻿@model ASP01.Models.ChangeLanguageViewModel
+@{
+    ViewBag.Title = "Change Language";
+}
+
+@helper selected(string c, string culture)
+{
+    if (c.ToLower() == culture.ToLower())
+    {
+        @:checked="checked"
+    }
+}
+
+<h2>@ViewBag.Title.</h2>
+
+@using (Html.BeginForm("ChangeLanguage", "Manage", FormMethod.Post, new { @class = "form-horizontal", role = "form" }))
+{
+    @Html.AntiForgeryToken()
+    <h4>Change Password Form</h4>
+    <hr />
+    @Html.ValidationSummary("", new { @class = "text-danger" })
+    <div class="control-group">
+        <div class="controls">
+            <label for="en-us">
+                <input name="Language" id="en-us" value="en-us" type="radio" @selected("en-us", Model.Language) /> English
+            </label>
+        </div>
+    </div>
+    <div class="control-group">
+        <div class="controls">
+            <label for="de">
+                <input name="Language" id="de" value="de" type="radio" @selected("de", Model.Language) /> Deutsch
+            </label>
+        </div>
+    </div>
+    <div class="form-group">
+        <div class="col-md-10">
+            <input type="submit" value="Change language" class="btn btn-default" />
+        </div>
+    </div>
+}
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+}

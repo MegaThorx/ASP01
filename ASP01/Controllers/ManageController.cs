@@ -70,7 +70,8 @@ namespace ASP01.Controllers
                 PhoneNumber = await UserManager.GetPhoneNumberAsync(userId),
                 TwoFactor = await UserManager.GetTwoFactorEnabledAsync(userId),
                 Logins = await UserManager.GetLoginsAsync(userId),
-                BrowserRemembered = await AuthenticationManager.TwoFactorBrowserRememberedAsync(userId)
+                BrowserRemembered = await AuthenticationManager.TwoFactorBrowserRememberedAsync(userId),
+                Language = await UserManager.GetLanguage(userId)
             };
             return View(model);
         }
@@ -214,12 +215,51 @@ namespace ASP01.Controllers
         }
 
         //
+        // GET: /Manage/ChangeLanguage
+        public async Task<ActionResult> ChangeLanguage()
+        {
+            var userId = User.Identity.GetUserId();
+            var model = new ChangeLanguageViewModel
+            {
+                Language = await UserManager.GetLanguage(userId)
+            };
+
+            return View(model);
+        }
+
+        //
+        // POST: /Manage/ChangeLanguage
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<ActionResult> ChangeLanguage(ChangeLanguageViewModel model)
+        {
+            if (!ModelState.IsValid)
+            {
+                return View(model);
+            }
+
+            var result = await UserManager.SetLanguage(User.Identity.GetUserId(), model.Language);
+            if (result.Succeeded)
+            {
+                var user = await UserManager.FindByIdAsync(User.Identity.GetUserId());
+                if (user != null)
+                {
+                    await SignInManager.SignInAsync(user, isPersistent: false, rememberBrowser: false);
+                }
+                return RedirectToAction("Index", new { Message = ManageMessageId.SetLanguageSuccess });
+            }
+            AddErrors(result);
+
+            return View();
+        }
+
+        //
         // GET: /Manage/ChangePassword
         public ActionResult ChangePassword()
         {
             return View();
         }
-
+        
         //
         // POST: /Manage/ChangePassword
         [HttpPost]
@@ -377,6 +417,7 @@ namespace ASP01.Controllers
         {
             AddPhoneSuccess,
             ChangePasswordSuccess,
+            SetLanguageSuccess,
             SetTwoFactorSuccess,
             SetPasswordSuccess,
             RemoveLoginSuccess,

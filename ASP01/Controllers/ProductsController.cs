@@ -12,7 +12,7 @@ using ASP01.Repositories;
 
 namespace ASP01.Controllers
 {
-    public class ProductsController : Controller
+    public class ProductsController : BaseController
     {
         private readonly RepositoryManager _repository = new RepositoryManager();
 

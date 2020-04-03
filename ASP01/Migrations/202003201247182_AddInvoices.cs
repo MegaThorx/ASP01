@@ -53,8 +53,8 @@ namespace ASP01.Migrations
                         Discount = c.Single(nullable: false),
                     })
                 .PrimaryKey(t => new { t.InvoiceId, t.Position })
-                .ForeignKey("cust.Invoices", t => t.InvoiceId, cascadeDelete: true)
-                .ForeignKey("cust.Product", t => t.ProductId, cascadeDelete: true)
+                .ForeignKey("cust.Invoices", t => t.InvoiceId)
+                .ForeignKey("cust.Product", t => t.ProductId)
                 .Index(t => t.InvoiceId)
                 .Index(t => t.ProductId);
             

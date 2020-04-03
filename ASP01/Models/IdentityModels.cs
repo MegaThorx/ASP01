@@ -36,6 +36,8 @@ namespace ASP01.Models
 
         [Display(Name = "Kunde")]
         public int? CustomerId { get; set; }
+        
+        public string Language { get; set; }
 
         public Customer Customer { get; set; }
 

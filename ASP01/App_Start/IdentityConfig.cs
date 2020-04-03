@@ -5,6 +5,7 @@ using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
 using System.Web;
+using ASP01.Helpers;
 using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.EntityFramework;
 using Microsoft.AspNet.Identity.Owin;
@@ -38,6 +39,33 @@ namespace ASP01
         public ApplicationUserManager(IUserStore<ApplicationUser> store)
             : base(store)
         {
+        }
+
+        public async Task<string> GetLanguage(string userId)
+        {
+            ApplicationUser user = await this.FindByIdAsync(userId);
+
+            if (string.IsNullOrEmpty(user.Language))
+            {
+                return "en-US";
+            }
+
+            return user.Language;
+        }
+
+        public async Task<IdentityResult> SetLanguage(string userId, string language)
+        {
+            var user = await FindByIdAsync(userId);
+
+            if (user == null)
+            {
+                return IdentityResult.Failed("Unknown user");
+            }
+
+            user.Language = CultureHelper.GetImplementedCulture(language);
+            await UpdateAsync(user);
+
+            return IdentityResult.Success;;
         }
 
         public static ApplicationUserManager Create(IdentityFactoryOptions<ApplicationUserManager> options, IOwinContext context) 
