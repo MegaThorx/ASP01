@@ -33,16 +33,28 @@ namespace ASP01.Repositories
             _context = context;
         }
 
-        public virtual async Task<IList<T>> GetAll(Expression<Func<T, int>> orderBy = null)
+        public virtual async Task<IList<T>> GetAll(Expression<Func<T, bool>> where = null)
         {
             var dbSet = _context.Set<T>();
 
-            if (orderBy != null)
+            if (where != null)
             {
-                return await dbSet.OrderBy(orderBy).ToListAsync();
+                return await dbSet.Where(where).ToListAsync();
             }
 
             return await dbSet.ToListAsync();
+        }
+
+        public virtual IList<T> GetAllSync(Expression<Func<T, bool>> where = null)
+        {
+            var dbSet = _context.Set<T>();
+
+            if (where != null)
+            {
+                return dbSet.Where(where).ToList();
+            }
+
+            return dbSet.ToList();
         }
 
         public virtual async Task<T> Find(params object[] keyValues)

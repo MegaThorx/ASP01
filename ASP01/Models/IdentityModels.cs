@@ -42,6 +42,8 @@ namespace ASP01.Models
         public Customer Customer { get; set; }
 
         public virtual ICollection<BasketItem> BasketItems { get; set; }
+
+        public string FullName => FName + " " + LName;
     }
 
     public class ApplicationDbContext : IdentityDbContext<ApplicationUser>
@@ -49,6 +51,11 @@ namespace ASP01.Models
         public ApplicationDbContext()
             : base("DefaultConnection", throwIfV1Schema: false)
         {
+        }
+
+        public static ApplicationDbContext Create()
+        {
+            return new ApplicationDbContext();
         }
 
         // TODO: DbSets here
@@ -69,10 +76,7 @@ namespace ASP01.Models
 
         public DbSet<InvoicePosition> InvoicePositions { get; set; }
 
-        public static ApplicationDbContext Create()
-        {
-            return new ApplicationDbContext();
-        }
+        public DbSet<Comment> Comments { get; set; }
 
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
         {

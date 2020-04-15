@@ -6,6 +6,7 @@ using System.Web;
 using ASP01.Models;
 using ASP01.Repositories.Address;
 using ASP01.Repositories.BasketItems;
+using ASP01.Repositories.Comments;
 using ASP01.Repositories.Customers;
 using ASP01.Repositories.InvoicePositions;
 using ASP01.Repositories.Invoices;
@@ -46,6 +47,9 @@ namespace ASP01.Repositories
 
         private IAddressRepository _address { get; set; }
         public IAddressRepository Address => _address ?? (_address = new AddressRepository(_context));
+
+        private ICommentRepository _comment { get; set; }
+        public ICommentRepository Comment => _comment ?? (_comment = new CommentRepository(_context));
 
         public async Task<int> Commit()
         {

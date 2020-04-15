@@ -1,4 +1,5 @@
-﻿@model ASP01.Models.Product
+﻿@using System.Web.UI.WebControls
+@model ASP01.Models.Product
 
 @{
     ViewBag.Title = "Details";
@@ -48,3 +49,14 @@
         <a class="btn btn-sm btn-default" href="@Url.Action("Index")" role="button">Back to List</a>
     }
 </p>
+
+
+<div class="row">
+    <div class="col-sm-12" style="margin-bottom: 4rem;">
+        @Html.ActionLink("Neues Kommentar hinzufügen", "Create", "Comments", new { id = Model.ProductId }, new { @class = "btn btn-sm btn-primary" })
+    </div>
+</div>
+
+@{
+    Html.RenderAction("Index", "Comments", new { id = Model.ProductId });
+}

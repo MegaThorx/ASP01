@@ -1,0 +1,57 @@
+﻿@using ASP01.Models
+@model ICollection<Comment>
+@functions{
+    public bool HasChilds(ICollection<Comment> comments, Comment currentComment)
+    {
+        foreach(var comment in comments)
+        {
+            if (comment.ParentId == currentComment.CommentId)
+            {
+                return true;
+            }
+        }
+
+        return false;
+    }
+}
+
+@helper Comment(Comment comment)
+{
+    <div class="row">
+        <div class="col-sm-12">
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <strong>@Html.DisplayFor(modelItem => comment.User.FullName)</strong>
+                    <span class="text-muted">@Html.DisplayFor(modelItem => comment.CreatedAt)</span>
+                    @Html.ActionLink("Antworten", "Create", new { id = comment.ProductId, parentId = comment.CommentId }, new { @class = "btn btn-sm btn-primary pull-right", @style = "margin-top: -5px; margin-right: -5px" })
+                </div>
+                <div class="panel-body">
+                    <p>@Html.DisplayFor(modelItem => comment.Content)</p>
+                </div>
+            </div>
+        </div>
+    </div>
+}
+
+@helper RenderCommentHierarchy(ICollection<Comment> comments, Comment currentComment)
+{
+    foreach (var item in comments)
+    {
+        if ((currentComment == null && item.ParentId == null) || (currentComment != null && item.ParentId != null && item.ParentId == currentComment.CommentId))
+        {
+            @Comment(item)
+
+            if (HasChilds(comments, item))
+            {
+                <div class="row">
+                    <div class="col-sm-1"></div>
+                    <div class="col-sm-11">
+                        @RenderCommentHierarchy(comments, item)
+                    </div>
+                </div>
+            }
+        }
+    }
+}
+
+@RenderCommentHierarchy(Model, null)

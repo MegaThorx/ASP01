@@ -10,7 +10,8 @@ namespace ASP01.Repositories
 {
     public interface IBaseRepository<T> where T : class
     {
-        Task<IList<T>> GetAll(Expression<Func<T, int>> orderBy = null);
+        Task<IList<T>> GetAll(Expression<Func<T, bool>> where = null);
+        IList<T> GetAllSync(Expression<Func<T, bool>> where = null);
         IQueryable<T> GetAllQuery();
         Task<PaginatedList<T>> GetAllPaginated(IQueryable<T> query, int page = 1, int pageSize = 50);
         Task<PaginatedList<T>> GetAllPaginated(IOrderedQueryable<T> query, int page = 1, int pageSize = 50);
